@@ -3,6 +3,7 @@ os:
   - linux
 #  - osx
 # osx_image: xcode8.3
+sudo: required
 jdk:
   - oraclejdk8
   - oraclejdk7
