@@ -1,21 +1,21 @@
 language: java
 os:
   - linux
-  - osx
+#  - osx
 # osx_image: xcode8.3
 jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
-addons:
-  apt:
-    packages:
-      - graphviz
+#addons:
+#  apt:
+#    packages:
+#      - graphviz
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
   - (cat /etc/hosts ; echo 127.0.0.1 $(hostname)) | sudo tee /etc/hosts
-#  - if [ $TRAVIS_OS_NAME = "linux" ]; then sudo apt-get -qq update && apt-get install -y graphviz; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update && apt-get install -y graphviz; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update && brew install graphviz; fi
 install: ./gradlew -S -Pskip.signing assemble
 script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
