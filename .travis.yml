@@ -24,3 +24,4 @@ notifications:
   irc:
     channels:
       - "irc.freenode.org#asciidoctor"
+
