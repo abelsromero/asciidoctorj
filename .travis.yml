@@ -1,3 +1,4 @@
+dist: precise
 language: java
 jdk:
   - oraclejdk8
@@ -13,6 +14,11 @@ matrix:
           packages:
             - openjdk-7-jdk
       jdk: openjdk7
+    - addons:
+        apt:
+          packages:
+            - oracle-java7-installer
+      jdk: oraclejdk7
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
