@@ -11,11 +11,11 @@ before_install:
   - sudo apt-get install -y graphviz
   # Fix Gradle on OpenJDK images (https://github.com/gradle/gradle/issues/2421)
   - if [[ $JAVA_HOME == *"java-7-openjdk"* ]]; then
-      BCPROV_FILENAME=bcprov-ext-jdk15on-158.jar
-      wget "https://bouncycastle.org/download/${BCPROV_FILENAME}"
-      sudo mv $BCPROV_FILENAME /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext
-      sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
-      echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
+        BCPROV_FILENAME=bcprov-ext-jdk15on-158.jar;
+        wget "https://bouncycastle.org/download/${BCPROV_FILENAME}";
+        sudo mv $BCPROV_FILENAME /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext;
+        sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security;
+        echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security;
     fi
 install: ./gradlew -S -Pskip.signing assemble
 script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
