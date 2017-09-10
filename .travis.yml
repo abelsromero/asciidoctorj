@@ -7,8 +7,8 @@ matrix:
     - addons:
         apt:
           packages:
-            - oraclejdk7
-      jdk: oracle-java7-installer
+            - oracle-java7-installer
+      jdk: oraclejdk7
     - addons:
         apt:
           packages:
