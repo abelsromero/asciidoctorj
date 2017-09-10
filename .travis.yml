@@ -2,26 +2,21 @@ language: java
 jdk:
   - oraclejdk8
   - openjdk8
-#  - openjdk7
-matrix:
-  include:
-    - addons:
-        apt:
-          packages:
-            - openjdk-7-jdk
-      jdk: openjdk7
-      before_install:
-        - BCPROV_FILENAME=bcprov-ext-jdk15on-158.jar
-        - wget "https://bouncycastle.org/download/${BCPROV_FILENAME}"
-        - sudo mv $BCPROV_FILENAME /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext
-        - sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
-        - echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
+  - openjdk7
 before_script: unset GEM_PATH GEM_HOME JRUBY_OPTS
 before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
   - (cat /etc/hosts ; echo 127.0.0.1 $(hostname)) | sudo tee /etc/hosts
   - sudo apt-get -qq update
   - sudo apt-get install -y graphviz
+  # Fix Gradle on OpenJDK images (https://github.com/gradle/gradle/issues/2421)
+  - if [[ $JAVA_HOME == *"java-7-openjdk"* ]]; then
+      BCPROV_FILENAME=bcprov-ext-jdk15on-158.jar
+      wget "https://bouncycastle.org/download/${BCPROV_FILENAME}"
+      sudo mv $BCPROV_FILENAME /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext
+      sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
+      echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
+    fi
 install: ./gradlew -S -Pskip.signing assemble
 script: ./gradlew -S -Pskip.signing check && bash test-asciidoctor-upstream.sh
 notifications:
@@ -29,4 +24,3 @@ notifications:
   irc:
     channels:
       - "irc.freenode.org#asciidoctor"
-# with dist:precise ell seem to work without matrix
