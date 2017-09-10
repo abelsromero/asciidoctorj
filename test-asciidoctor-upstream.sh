@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 # This script runs the AsciidoctorJ tests against the specified tag (or master) of the Asciidoctor Ruby gem.
 
