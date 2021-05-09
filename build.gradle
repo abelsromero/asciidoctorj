@@ -86,7 +86,7 @@ ext {
   spockVersion = '0.7-groovy-2.0'
   threadSafeGemVersion = '0.3.6'
   tiltGemVersion = '2.0.10'
-  osgiVersion = '7.0.0'
+  osgiVersion = '8.0.0'
 }
 
 allprojects {
@@ -104,7 +104,7 @@ subprojects {
 
   // NOTE sourceCompatibility & targetCompatibility are set in gradle.properties to meet requirements of Gradle
   // Must redefine here to work around a bug in the Eclipse plugin
-  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
 
   plugins.withType(JavaPlugin) {
     project.tasks.withType(JavaCompile) { task ->

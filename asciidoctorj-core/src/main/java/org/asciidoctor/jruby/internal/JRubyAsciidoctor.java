@@ -11,7 +11,6 @@ import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.RubyExtensionRegistry;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.DirectoryWalker;
-import org.asciidoctor.jruby.ast.impl.AuthorImpl;
 import org.asciidoctor.jruby.ast.impl.DocumentHeaderImpl;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.converter.internal.ConverterRegistryExecutor;
@@ -471,7 +470,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load",
                 rubyRuntime.newString(content), rubyHash));
     }
-    
+
     @Override
     public Document loadFile(File file, Map<String, Object> options) {
         RubyHash rubyHash = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
@@ -487,7 +486,7 @@ public class JRubyAsciidoctor implements AsciidoctorJRuby, LogHandler {
         return (Document) NodeConverter.createASTNode(getAsciidoctorModule().callMethod("load_file",
                 rubyRuntime.newString(file.getAbsolutePath()), rubyHash));
     }
-    
+
     @Override
     public ExtensionGroup createGroup() {
         return createGroup(UUID.randomUUID().toString());
