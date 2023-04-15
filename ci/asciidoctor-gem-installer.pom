@@ -5,10 +5,9 @@
     <groupId>rubygems</groupId>
     <artifactId>asciidoctor</artifactId>
     <version></version>
-    <packaging>gem</packaging>
     <name>Asciidoctor RubyGem Installer</name>
     <description>Installs the upstream Asciidoctor RubyGem to the local repository.</description>
-    <url>http://asciidoctor.org</url>
+    <url>https://asciidoctor.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -17,8 +16,7 @@
             <plugin>
                 <groupId>de.saumya.mojo</groupId>
                 <artifactId>gem-maven-plugin</artifactId>
-                <version>1.1.8</version>
-                <extensions>true</extensions>
+                <version>2.0.1</version>
             </plugin>
         </plugins>
     </build>
