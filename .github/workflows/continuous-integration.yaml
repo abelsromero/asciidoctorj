@@ -34,7 +34,8 @@ jobs:
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./ci/test-asciidoctor-upstream.sh
-      - uses: actions/upload-artifact@v3
+      - name: Upload reports
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: artifact
