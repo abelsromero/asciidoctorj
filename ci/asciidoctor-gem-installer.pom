@@ -6,7 +6,6 @@
     <artifactId>asciidoctor</artifactId>
     <version></version>
     <!-- Removing it causes the polluted tests error -->
-    <packaging>gem</packaging>
     <name>Asciidoctor RubyGem Installer</name>
     <description>Installs the upstream Asciidoctor RubyGem to the local repository.</description>
     <url>https://asciidoctor.org</url>
