@@ -5,7 +5,7 @@
     <groupId>rubygems</groupId>
     <artifactId>asciidoctor</artifactId>
     <version></version>
-    <packaging>gem</packaging>
+    <!--<packaging>gem</packaging> -->
     <name>Asciidoctor RubyGem Installer</name>
     <description>Installs the upstream Asciidoctor RubyGem to the local repository.</description>
     <url>http://asciidoctor.org</url>
