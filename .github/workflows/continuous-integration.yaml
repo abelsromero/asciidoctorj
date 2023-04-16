@@ -38,5 +38,11 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: artifact
+          name: asciidoctorj-core-reports
           path: asciidoctorj-core/build/reports/*
+      - name: Upload local gem
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: asciidoctorj-core-reports
+          path: ~/.m2/repository/rubygems/asciidoctor/**
