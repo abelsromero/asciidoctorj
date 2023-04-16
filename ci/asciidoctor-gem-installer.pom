@@ -5,6 +5,7 @@
     <groupId>rubygems</groupId>
     <artifactId>asciidoctor</artifactId>
     <version></version>
+    <packaging>gem</packaging>
     <!-- Removing it causes the polluted tests error -->
     <name>Asciidoctor RubyGem Installer</name>
     <description>Installs the upstream Asciidoctor RubyGem to the local repository.</description>
@@ -17,7 +18,6 @@
             <plugin>
                 <groupId>de.saumya.mojo</groupId>
                 <artifactId>gem-maven-plugin</artifactId>
-                <!-- v1.1.8 requires packaging=gem -->
                 <version>2.0.1</version>
                 <extensions>true</extensions>
             </plugin>
