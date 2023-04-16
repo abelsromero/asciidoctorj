@@ -18,7 +18,6 @@ jobs:
       matrix:
         java:
           - '11'
-          - '17'
         os:
           - ubuntu-latest
     runs-on: ${{ matrix.os }}
@@ -44,5 +43,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: asciidoctorj-core-reports
+          name: asciidoctor-gem
           path: ~/.m2/repository/rubygems/asciidoctor/**
