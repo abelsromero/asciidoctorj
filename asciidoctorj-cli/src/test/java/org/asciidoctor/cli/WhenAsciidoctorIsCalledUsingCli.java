@@ -30,7 +30,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
 
     private static final String SOURCE_EXTENSION_PATTERN = "\\.asciidoc$";
 
-    private ClasspathHelper classpath;
+    private static ClasspathHelper classpath;
 
     @TempDir
     public File temporaryFolder;
@@ -38,7 +38,7 @@ public class WhenAsciidoctorIsCalledUsingCli {
     public String pwd = new File("").getAbsolutePath();
 
     @BeforeAll
-    void beforeAll() {
+    static void beforeAll() {
         classpath = new ClasspathHelper();
         classpath.setClassloader(WhenAsciidoctorIsCalledUsingCli.class);
     }
