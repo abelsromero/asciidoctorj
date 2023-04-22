@@ -99,8 +99,8 @@ jar {
 }
 
 test {
-  useJUnit {
-    excludeCategories 'org.asciidoctor.categories.Polluted'
+  useJUnitPlatform() {
+    excludeTags("polluted")
   }
 }
 
@@ -119,8 +119,8 @@ version.asciidoctor: $asciidoctorGemVersion
 jar.dependsOn createVersionFile
 
 task pollutedTest(type: Test) {
-  useJUnit {
-    includeCategories 'org.asciidoctor.categories.Polluted'
+  useJUnitPlatform() {
+    includeTags 'polluted'
   }
   forkEvery = 10
   minHeapSize = '128m'

@@ -5,31 +5,32 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.asciidoctor.util.ClasspathHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.FileReader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(Arquillian.class)
 public class OptionsTest {
 
-    @ArquillianResource
     private Asciidoctor asciidoctor;
+    private ClasspathHelper classpathResources;
 
-    @ArquillianResource
-    private ClasspathResources classpathResources;
+    @TempDir
+    public File tempDir;
 
-    @ArquillianResource
-    private TemporaryFolder temporaryFolder;
+    @BeforeEach
+    public void beforeEach() {
+        asciidoctor = Asciidoctor.Factory.create();
+        classpathResources = new ClasspathHelper();
+        classpathResources.setClassloader(OptionsTest.class);
+    }
 
     @Test
     public void simple_options_example_embeddable_document() {
@@ -46,12 +47,12 @@ public class OptionsTest {
     }
 
     @Test
-    public void options_for_pdf_document() throws Exception {
+    public void options_for_pdf_document() {
 //tag::optionsPDFBackend[]
         File targetFile = // ...
 //end::optionsPDFBackend[]
-        temporaryFolder.newFile("test.pdf");
-        assertTrue(targetFile.exists());
+                new File(tempDir, "test.pdf");
+
 //tag::optionsPDFBackend[]
         asciidoctor.convert(
                 "Hello World",
@@ -95,7 +96,7 @@ public class OptionsTest {
 //tag::optionToFile[]
         File targetFile = //...
 //end::optionToFile[]
-        temporaryFolder.newFile("toFileExample.html");
+                new File(tempDir, "toFileExample.html");
 
 //tag::optionToFile[]
         asciidoctor.convert(
