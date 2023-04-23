@@ -8,6 +8,7 @@ import org.asciidoctor.SafeMode;
 import org.asciidoctor.util.ClasspathHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
@@ -22,7 +23,7 @@ public class OptionsTest {
     private Asciidoctor asciidoctor;
     private ClasspathHelper classpathResources;
 
-    @TempDir
+    @TempDir(cleanup = CleanupMode.NEVER)
     public File tempDir;
 
     @BeforeEach
