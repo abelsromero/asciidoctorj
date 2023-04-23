@@ -21,7 +21,7 @@ public class CopyrightFooterPostprocessorTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(CopyrightFooterPostprocessorTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

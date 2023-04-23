@@ -29,7 +29,7 @@ public class WhenBackendIsPdf {
     public void initAsciidoctor() {
         this.asciidoctor = Asciidoctor.Factory.create();
         this.classpath = new ClasspathHelper();
-        this.classpath.setClassloader(WhenBackendIsPdf.class);
+        this.classpath.setClassloader(this.getClass());
     }
 
     @Test

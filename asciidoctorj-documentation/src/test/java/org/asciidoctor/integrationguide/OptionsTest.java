@@ -29,7 +29,7 @@ public class OptionsTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(OptionsTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

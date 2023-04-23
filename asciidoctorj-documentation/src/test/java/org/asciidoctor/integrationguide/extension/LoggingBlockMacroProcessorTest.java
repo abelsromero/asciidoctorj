@@ -24,7 +24,7 @@ public class LoggingBlockMacroProcessorTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(LoggingBlockMacroProcessorTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

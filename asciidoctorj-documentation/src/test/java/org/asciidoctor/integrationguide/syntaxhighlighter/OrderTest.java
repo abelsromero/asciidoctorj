@@ -27,7 +27,7 @@ public class OrderTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(OrderTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

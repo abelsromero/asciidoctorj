@@ -24,7 +24,7 @@ public class TextConverterTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(TextConverterTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

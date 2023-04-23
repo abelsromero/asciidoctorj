@@ -30,7 +30,7 @@ public class HighlightJsHighlighterTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(HighlightJsHighlighterTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

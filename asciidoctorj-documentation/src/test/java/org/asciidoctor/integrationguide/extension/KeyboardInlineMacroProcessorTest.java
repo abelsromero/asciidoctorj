@@ -20,7 +20,7 @@ public class KeyboardInlineMacroProcessorTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(KeyboardInlineMacroProcessorTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

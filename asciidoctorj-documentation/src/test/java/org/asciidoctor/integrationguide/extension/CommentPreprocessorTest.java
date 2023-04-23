@@ -21,7 +21,7 @@ public class CommentPreprocessorTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(CommentPreprocessorTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

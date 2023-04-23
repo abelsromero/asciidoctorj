@@ -21,7 +21,7 @@ public class LsIncludeProcessorTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(LsIncludeProcessorTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test

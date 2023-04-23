@@ -21,7 +21,7 @@ public class IssueInlineMacroProcessorTest {
     public void beforeEach() {
         asciidoctor = Asciidoctor.Factory.create();
         classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(RobotsDocinfoProcessorTest.class);
+        classpathResources.setClassloader(this.getClass());
     }
 
     @Test
