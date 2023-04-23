@@ -64,6 +64,20 @@ jobs:
         shell: cmd
         run: |
           gradlew.bat -i -S check
+      - name: Upload asciidoctorj-core reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: asciidoctorj-core-reports
+          path: asciidoctorj-core/build/reports/*
+      - name: Upload asciidoctorj-documentation reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        env:
+          os_name: ${{ matrix.os }}
+        with:
+          name: asciidoctorj-documentation-reports-${{ env.os_name }}
+          path: asciidoctorj-documentation/build/reports/*
   test-asciidoctor-upstream:
     name: Test Asciidoctor Upstream
     needs:
