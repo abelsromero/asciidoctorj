@@ -1,5 +1,3 @@
-import org.apache.tools.ant.filters.*
-
 jar.enabled = false
 
 dependencies {
@@ -24,6 +22,4 @@ compileTestJava {
     }
 }
 
-
 test.enabled = testClasses.enabled = JavaVersion.current().isJava7Compatible()
-

@@ -4,7 +4,6 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.integrationguide.extension.KeyboardInlineMacroProcessorTest;
 import org.asciidoctor.util.ClasspathHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -62,7 +61,7 @@ public class PrismJsHighlighterTest {
 
         File docFile = new File(toDir, "sources.html");
 
-        Document document = Jsoup.parse(new File(toDir, "sources.html"), "UTF-8");
+        Document document = Jsoup.parse(docFile, "UTF-8");
         Elements keywords = document.select("div.content pre.highlight code span.token.keyword"); // <2>
         assertThat(keywords, not(empty()));
         assertThat(keywords.first().text(), is("public"));
