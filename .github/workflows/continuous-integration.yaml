@@ -95,9 +95,15 @@ jobs:
         run: |
           unset GEM_PATH GEM_HOME JRUBY_OPTS
           ./ci/test-asciidoctor-upstream.sh
-      - name: Upload reports
+      - name: Upload asciidoctorj-core reports
         uses: actions/upload-artifact@v3
         if: always()
         with:
           name: asciidoctorj-core-reports
           path: asciidoctorj-core/build/reports/*
+      - name: Upload asciidoctorj-documentation reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: asciidoctorj-documentation-reports-${{ matrix.os }}
+          path: asciidoctorj-documentation/build/reports/*
