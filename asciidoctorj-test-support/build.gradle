@@ -1,7 +1,13 @@
 apply plugin: 'java'
 
 dependencies {
-    api "junit:junit:${junit4Version}"
+    implementation(platform("org.junit:junit-bom:$junit5Version"))
+    // TODO really need api?
+    api "org.junit.jupiter:junit-jupiter-api"
+
+//    implementation 'javax.inject:javax.inject:1'
+    implementation project(':asciidoctorj-api')
+    testImplementation project(':asciidoctorj')
 }
 
 def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"
