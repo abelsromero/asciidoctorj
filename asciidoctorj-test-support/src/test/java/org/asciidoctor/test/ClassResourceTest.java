@@ -1,6 +1,7 @@
 package org.asciidoctor.test;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

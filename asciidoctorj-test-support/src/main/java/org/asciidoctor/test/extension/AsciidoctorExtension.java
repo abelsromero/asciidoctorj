@@ -1,16 +1,20 @@
-package org.asciidoctor.test;
+package org.asciidoctor.test.extension;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.test.ClassResource;
+import org.asciidoctor.test.TestMethodResource;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.asciidoctor.test.extension.ReflectionUtils.findFields;
+import static org.asciidoctor.test.extension.ReflectionUtils.hasAnnotation;
+
 
 /**
  * Injects and Asciidoctor instance in any field of type {@link Asciidoctor} annotated with
@@ -20,16 +24,15 @@ import java.util.stream.Collectors;
  */
 public class AsciidoctorExtension implements TestInstancePostProcessor, BeforeEachCallback {
 
-    private static final ExtensionContext.Namespace TEST_CONTEXT_MANAGER_NAMESPACE = ExtensionContext.Namespace.create(AsciidoctorExtension.class);
+    private static final Namespace TEST_CONTEXT_NAMESPACE = Namespace.create(AsciidoctorExtension.class);
 
     @Override
-    public void postProcessTestInstance(Object testInstance, ExtensionContext context) throws Exception {
-        Class<?> testClass = context.getRequiredTestClass();
-        ExtensionContext.Store store = getStore(context);
-        TestContextManager tcm = store
-                .getOrComputeIfAbsent(testClass,
-                        aClass -> {
-                            final List<Field> asciidoctorFields = findAsciidoctorFields(testInstance);
+    public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
+        Class<?> contextKey = context.getRequiredTestClass();
+        getStore(context)
+                .getOrComputeIfAbsent(contextKey,
+                        keyType -> {
+                            final List<Field> asciidoctorFields = findFields(testInstance, Asciidoctor.class);
                             final List<Field> sharedFields = new ArrayList<>();
                             final List<Field> notSharedFields = new ArrayList<>();
                             for (Field field : asciidoctorFields) {
@@ -42,11 +45,10 @@ public class AsciidoctorExtension implements TestInstancePostProcessor, BeforeEa
                             return new TestContextManager(sharedFields, notSharedFields);
                         },
                         TestContextManager.class);
-        System.out.println(tcm);
     }
 
     private static ExtensionContext.Store getStore(ExtensionContext context) {
-        return context.getRoot().getStore(TEST_CONTEXT_MANAGER_NAMESPACE);
+        return context.getRoot().getStore(TEST_CONTEXT_NAMESPACE);
     }
 
     @Override
@@ -59,18 +61,5 @@ public class AsciidoctorExtension implements TestInstancePostProcessor, BeforeEa
                     tcm.initSharedFields(testInstance);
                     tcm.initTestFields(testInstance);
                 });
-//        Object instanceFromContext = testInstance;
-//        Object instanceFromTcm = testContextManager.getInstance();
-
-    }
-
-    private boolean hasAnnotation(Field field, Class<? extends Annotation> annotation) {
-        return field.getAnnotation(annotation) != null;
-    }
-
-    private List<Field> findAsciidoctorFields(Object testInstance) {
-        return Arrays.stream(testInstance.getClass().getDeclaredFields())
-                .filter(field -> Asciidoctor.class.isAssignableFrom((field.getType())))
-                .collect(Collectors.toList());
     }
 }

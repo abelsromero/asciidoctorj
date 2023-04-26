@@ -2,7 +2,7 @@ package org.asciidoctor.integrationguide.converter;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.util.ClasspathHelper;
+import org.asciidoctor.test.extension.ClasspathHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

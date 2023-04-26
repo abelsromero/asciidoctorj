@@ -1,7 +1,7 @@
 package org.asciidoctor
 
 import org.asciidoctor.jruby.internal.JRubyAsciidoctor
-import org.asciidoctor.util.ClasspathHelper
+import org.asciidoctor.test.extension.ClasspathHelper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element

@@ -1,6 +1,7 @@
 package org.asciidoctor.test;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -29,8 +30,9 @@ public class MultipleResourceTest {
     @Test
     void should_inject_asciidoctor() {
         assertThat(firstSharedAsciidoctor).isNotNull();
-        assertThat(secondSharedAsciidoctor).isNotNull();
-        assertThat(firstSharedAsciidoctor).isSameAs(secondSharedAsciidoctor);
+        assertThat(secondSharedAsciidoctor)
+                .isNotNull()
+                .isSameAs(firstSharedAsciidoctor);
 
         assertThat(firstMethodAsciidoctor)
                 .isNotNull()
@@ -41,7 +43,27 @@ public class MultipleResourceTest {
                 .isNotSameAs(firstSharedAsciidoctor)
                 .isNotSameAs(secondSharedAsciidoctor);
         assertThat(firstMethodAsciidoctor).isNotSameAs(secondMethodAsciidoctor);
+
+        copy = firstSharedAsciidoctor;
     }
 
+    @Order(2)
+    @Test
+    void should_only_initialize_new_shared_asciidoctor_instances() {
+        assertThat(firstSharedAsciidoctor)
+                .isNotNull()
+                .isSameAs(secondSharedAsciidoctor)
+                .isSameAs(copy);
+        assertThat(secondSharedAsciidoctor)
+                .isNotNull()
+                .isSameAs(copy);
 
+        assertThat(firstMethodAsciidoctor)
+                .isNotNull()
+                .isNotSameAs(copy);
+        assertThat(secondMethodAsciidoctor)
+                .isNotNull()
+                .isNotSameAs(copy);
+        assertThat(firstMethodAsciidoctor).isNotSameAs(secondMethodAsciidoctor);
+    }
 }

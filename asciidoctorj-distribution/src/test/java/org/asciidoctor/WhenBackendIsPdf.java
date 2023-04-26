@@ -1,6 +1,6 @@
 package org.asciidoctor;
 
-import org.asciidoctor.util.ClasspathHelper;
+import org.asciidoctor.test.extension.ClasspathHelper;
 import org.asciidoctor.util.RougeColors;
 import org.asciidoctor.util.pdf.ColorsProcessor;
 import org.asciidoctor.util.pdf.ImageProcessor;

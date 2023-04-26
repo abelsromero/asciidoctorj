@@ -1,7 +1,7 @@
 package org.asciidoctor.cli;
 
 import org.asciidoctor.cli.jruby.AsciidoctorInvoker;
-import org.asciidoctor.util.ClasspathHelper;
+import org.asciidoctor.test.extension.ClasspathHelper;
 import org.assertj.core.api.Assertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

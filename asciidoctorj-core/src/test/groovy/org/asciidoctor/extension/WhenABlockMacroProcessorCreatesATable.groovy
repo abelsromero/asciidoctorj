@@ -3,7 +3,7 @@ package org.asciidoctor.extension
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
-import org.asciidoctor.util.ClasspathHelper
+import org.asciidoctor.test.extension.ClasspathHelper
 import org.asciidoctor.util.TestHttpServer
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
