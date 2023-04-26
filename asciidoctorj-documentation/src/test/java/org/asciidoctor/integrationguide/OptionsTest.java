@@ -5,9 +5,12 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.test.extension.ClasspathHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.test.ClassResource;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -18,20 +21,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class OptionsTest {
 
+    @ClassResource
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
 
     @TempDir(cleanup = CleanupMode.NEVER)
     public File tempDir;
 
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
 
     @Test
     public void simple_options_example_embeddable_document() {
@@ -68,7 +66,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void convert_in_unsafe_mode() {
+    public void convert_in_unsafe_mode(@ClasspathResource("includingcontent.adoc") File inputDocument) {
 //tag::unsafeConversion[]
         File sourceFile =
 //end::unsafeConversion[]
@@ -79,7 +77,7 @@ public class OptionsTest {
             new File("includingcontent.adoc");
 //end::unsafeConversion[]
 */
-                classpathResources.getResource("includingcontent.adoc");
+                inputDocument;
 //tag::unsafeConversion[]
         String result = asciidoctor.convertFile(
                 sourceFile,

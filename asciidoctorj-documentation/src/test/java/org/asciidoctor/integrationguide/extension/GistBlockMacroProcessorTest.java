@@ -2,35 +2,35 @@ package org.asciidoctor.integrationguide.extension;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
+import org.asciidoctor.test.ClassResource;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.asciidoctor.test.extension.ClasspathHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class GistBlockMacroProcessorTest {
 
+    @ClassResource
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
 
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
 
     @Test
-    public void should_create_script_element_for_block_macro() {
+    public void should_create_script_element_for_block_macro(@ClasspathResource("gist-macro.adoc") File gistMacroDocument) {
 
 //tag::include[]
         File gistmacro_adoc = //...
 //end::include[]
-                classpathResources.getResource("gist-macro.adoc");
+                gistMacroDocument;
+
 //tag::include[]
         asciidoctor.javaExtensionRegistry().blockMacro(GistBlockMacroProcessor.class);      // <1>
 
@@ -44,9 +44,8 @@ public class GistBlockMacroProcessorTest {
     }
 
     @Test
-    public void should_create_script_element_for_block_macro_with_positional_attributes() {
+    public void should_create_script_element_for_block_macro_with_positional_attributes(@ClasspathResource("gist-macro-attributes.adoc") File gistmacro_adoc) {
 
-        File gistmacro_adoc = classpathResources.getResource("gist-macro-attributes.adoc");
         asciidoctor.javaExtensionRegistry().blockMacro(GistBlockMacroPositionalAttributesProcessor.class);
 
         String result = asciidoctor.convertFile(gistmacro_adoc, Options.builder().toFile(false).build());

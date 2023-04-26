@@ -205,11 +205,6 @@ boolean usesSpock(def project) {
   project.name in ['asciidoctorj']
 }
 
-boolean usesArquillian(def project) {
-  project.name in ['asciidoctorj']
-}
-
-
 // apply JRuby and sources/javadocs packaging stuff for all subprojects except the distribution
 configure(subprojects.findAll { !it.isDistribution() }) {
 

@@ -5,9 +5,12 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.test.extension.ClasspathHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.asciidoctor.test.ClassResource;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
@@ -17,28 +20,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class HighlightJsHighlighterTest {
 
+    @ClassResource
     private Asciidoctor asciidoctor;
-    private ClasspathHelper classpathResources;
+
+    @ClasspathResource("sources.adoc")
+    private File sourcesDocument;
 
     @TempDir
     public File tempDir;
-
-    @BeforeEach
-    public void beforeEach() {
-        asciidoctor = Asciidoctor.Factory.create();
-        classpathResources = new ClasspathHelper();
-        classpathResources.setClassloader(this.getClass());
-    }
 
     @Test
     public void should_invoke_syntax_highlighter() {
 //tag::include[]
         File sources_adoc = //...
 //end::include[]
-            classpathResources.getResource("sources.adoc");
+                sourcesDocument;
 
         //tag::include[]
 
@@ -58,9 +57,7 @@ public class HighlightJsHighlighterTest {
 
     @Test
     public void should_invoke_syntax_highlighter_with_3_params() {
-        File sources_adoc =
-            classpathResources.getResource("sources.adoc");
-
+        File sources_adoc = sourcesDocument;
 
         asciidoctor.syntaxHighlighterRegistry()
             .register(org.asciidoctor.integrationguide.syntaxhighlighter.threeparams.HighlightJsHighlighter.class, "myhighlightjs");
@@ -77,9 +74,7 @@ public class HighlightJsHighlighterTest {
 
     @Test
     public void should_invoke_formatting_syntax_highlighter() {
-        File sources_adoc =
-            classpathResources.getResource("sources.adoc");
-
+        File sources_adoc = sourcesDocument;
 
 //tag::includeformatter[]
 
@@ -101,8 +96,7 @@ public class HighlightJsHighlighterTest {
 
     @Test
     public void should_invoke_stylesheet_writing_syntax_highlighter() throws Exception {
-        File sources_adoc =
-            classpathResources.getResource("sources.adoc");
+        File sources_adoc = sourcesDocument;
 
 //tag::includestylesheetwriter[]
         File toDir = // ...

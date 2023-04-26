@@ -1,11 +1,9 @@
 apply plugin: 'java'
 
 dependencies {
-    implementation(platform("org.junit:junit-bom:$junit5Version"))
-    // TODO really need api?
+    api(platform("org.junit:junit-bom:$junit5Version"))
     api "org.junit.jupiter:junit-jupiter-api"
 
-//    implementation 'javax.inject:javax.inject:1'
     implementation project(':asciidoctorj-api')
     testImplementation project(':asciidoctorj')
 }

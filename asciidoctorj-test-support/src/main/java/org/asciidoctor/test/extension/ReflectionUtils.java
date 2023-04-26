@@ -28,14 +28,14 @@ class ReflectionUtils {
                 .collect(Collectors.toList());
     }
 
-    static void injectInstance(Object target, Field field, Object value) {
+    static void injectValue(Object target, Field field, Object value) {
         try {
             if (Modifier.isPrivate(field.getModifiers())) {
                 field.setAccessible(true);
                 field.set(target, value);
                 field.setAccessible(false);
             } else {
-                field.set(value, value);
+                field.set(target, value);
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.asciidoctor.test.extension.ReflectionUtils.findFields;
-import static org.asciidoctor.test.extension.ReflectionUtils.injectInstance;
+import static org.asciidoctor.test.extension.ReflectionUtils.injectValue;
 
 /**
  * Handles the initialization of {@link File} fields annotated with {@link org.asciidoctor.test.ClassResource}.
@@ -106,7 +106,7 @@ public class ClasspathExtension implements TestInstancePostProcessor, BeforeEach
         }
 
         public void initializeFields(Object testInstance) {
-            cache.forEach((k, v) -> injectInstance(testInstance, k, v));
+            cache.forEach((k, v) -> injectValue(testInstance, k, v));
         }
 
         public void initializeParameters(Parameter[] parameters, Object testInstance) {
