@@ -5,6 +5,7 @@ dependencies {
   api "org.jboss.arquillian.container:arquillian-container-test-spi:$arquillianVersion"
   api "org.jboss.arquillian.container:arquillian-container-impl-base:$arquillianVersion"
   api "org.jboss.arquillian.container:arquillian-container-test-impl-base:$arquillianVersion"
+  api "junit:junit:$junit4Version"
 }
 
 def javaApiUrl = "https://docs.oracle.com/javase/8/docs/api/"

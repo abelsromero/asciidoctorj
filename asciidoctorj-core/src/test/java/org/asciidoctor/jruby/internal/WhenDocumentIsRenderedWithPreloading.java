@@ -1,25 +1,24 @@
 package org.asciidoctor.jruby.internal;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.test.TestMethodResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.jruby.RubyBoolean;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.util.Map;
 
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.arquillian.api.Unshared;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jruby.RubyBoolean;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-@RunWith(Arquillian.class)
+@ExtendWith(AsciidoctorExtension.class)
 public class WhenDocumentIsRenderedWithPreloading {
 
-    @ArquillianResource(Unshared.class)
+    @TestMethodResource
     private Asciidoctor asciidoctor;
 
     @Test

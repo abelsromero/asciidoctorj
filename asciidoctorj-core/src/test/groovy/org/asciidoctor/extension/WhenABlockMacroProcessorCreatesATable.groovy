@@ -36,8 +36,7 @@ githubcontributors::asciidoctor/asciidoctorj[]
 
     def setup() {
         asciidoctor = Asciidoctor.Factory.create()
-        classpathResources = new ClasspathHelper()
-        classpathResources.classloader = WhenABlockMacroProcessorCreatesATable
+        classpathResources = new ClasspathHelper(WhenABlockMacroProcessorCreatesATable)
         TestHttpServer.start(['http://api.github.com/repos/asciidoctor/asciidoctorj/contributors': classpathResources.getResource('githubcontributors.json')])
     }
 

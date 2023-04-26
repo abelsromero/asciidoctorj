@@ -1,18 +1,17 @@
 package org.asciidoctor;
 
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.ast.*;
-import org.asciidoctor.jruby.internal.IOUtils;
-import org.asciidoctor.util.ClasspathResources;
+import org.asciidoctor.test.ClasspathResource;
+import org.asciidoctor.test.TestMethodResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.asciidoctor.test.extension.ClasspathExtension;
 import org.assertj.core.api.Assertions;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,7 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 
 
-@RunWith(Arquillian.class)
+@ExtendWith({AsciidoctorExtension.class, ClasspathExtension.class})
 public class WhenAsciiDocIsLoadedToDocument {
 
     private static final String DOCUMENT = "= Document Title\n" +
@@ -66,11 +65,9 @@ public class WhenAsciiDocIsLoadedToDocument {
             "\n" +
             "content";
 
-    @ArquillianResource(Unshared.class)
+    @TestMethodResource
     private Asciidoctor asciidoctor;
 
-    @ArquillianResource
-    private ClasspathResources classpath = new ClasspathResources();
 
     @Test
     public void should_return_empty_sources_when_document_is_null() {
@@ -164,11 +161,12 @@ public class WhenAsciiDocIsLoadedToDocument {
     }
 
     @Test
-    public void should_return_options_from_parsed_file_when_passed_as_options_object() {
+    public void should_return_options_from_parsed_file_when_passed_as_options_object(
+            @ClasspathResource("sourcelocation.adoc") File resource) {
+
         Options options = Options.builder()
                 .compact(true)
                 .build();
-        File resource = classpath.getResource("sourcelocation.adoc");
         Document document = asciidoctor.loadFile(resource, options);
 
         Map<Object, Object> documentOptions = document.getOptions();
@@ -289,15 +287,17 @@ public class WhenAsciiDocIsLoadedToDocument {
     }
 
     @Test
-    public void should_be_able_to_read_asset() throws FileNotFoundException {
+    public void should_be_able_to_read_asset(
+            @ClasspathResource("rendersample.asciidoc") File inputFile) throws IOException {
+
         Map<String, Object> options = OptionsBuilder.options().safe(SafeMode.SAFE)
                 .attributes(AttributesBuilder.attributes().dataUri(false))
                 .compact(true)
                 .asMap();
         Document document = asciidoctor.load(DOCUMENT, options);
-        File inputFile = classpath.getResource("rendersample.asciidoc");
+
         String content = document.readAsset(inputFile.getAbsolutePath(), new HashMap<>());
-        assertThat(content.replace("\r", ""), is(IOUtils.readFull(new FileReader(inputFile)).replace("\r", "")));
+        assertThat(content.replace("\r", ""), is(Files.readString(inputFile.toPath()).replace("\r", "")));
     }
 
     @Test
@@ -321,9 +321,8 @@ public class WhenAsciiDocIsLoadedToDocument {
     }
 
     @Test
-    public void should_be_able_to_get_source_location() {
-        // Given
-        File file = classpath.getResource("sourcelocation.adoc");
+    public void should_be_able_to_get_source_location(
+            @ClasspathResource("sourcelocation.adoc") File file) {
 
         // When
         Document document = asciidoctor.loadFile(file, OptionsBuilder.options().sourcemap(true).docType("book").asMap());

@@ -1,40 +1,34 @@
 package org.asciidoctor.jruby.internal;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.arquillian.api.Unshared;
 import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.util.ClasspathResources;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.asciidoctor.test.TestMethodResource;
+import org.asciidoctor.test.extension.AsciidoctorExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import unusual.extension.BoldifyPostProcessor;
 
-@RunWith(Arquillian.class)
+@ExtendWith(AsciidoctorExtension.class)
 public class WhenLoadingExtensionFromUnusualPackage {
 
-  @ArquillianResource
-  private ClasspathResources classpath;
+    @TestMethodResource
+    private Asciidoctor asciidoctor;
 
-  @ArquillianResource(Unshared.class)
-  private Asciidoctor asciidoctor;
+    @Test
+    public void shouldAllowLoadingUsingInstance() {
+        final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+        registry.postprocessor(new unusual.extension.BoldifyPostProcessor());
+    }
 
-  @Test
-  public void shouldAllowLoadingUsingInstance() {
-    final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
-    registry.postprocessor(new unusual.extension.BoldifyPostProcessor());
-  }
+    @Test
+    public void shouldAllowLoadingByClassName() {
+        final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+        registry.postprocessor(BoldifyPostProcessor.class.getCanonicalName());
+    }
 
-  @Test
-  public void shouldAllowLoadingByClassName() {
-    final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
-    registry.postprocessor(BoldifyPostProcessor.class.getCanonicalName());
-  }
-
-  @Test
-  public void shouldAllowLoadingByClass() {
-    final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
-    registry.postprocessor(BoldifyPostProcessor.class);
-  }
-
+    @Test
+    public void shouldAllowLoadingByClass() {
+        final JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+        registry.postprocessor(BoldifyPostProcessor.class);
+    }
 }

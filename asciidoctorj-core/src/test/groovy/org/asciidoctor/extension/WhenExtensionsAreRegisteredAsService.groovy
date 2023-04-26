@@ -24,8 +24,7 @@ class WhenExtensionsAreRegisteredAsService extends Specification {
 
     def setup() {
         asciidoctor = Asciidoctor.Factory.create()
-        classpath = new ClasspathHelper()
-        classpath.classloader = WhenExtensionsAreRegisteredAsService
+        classpath = new ClasspathHelper(WhenExtensionsAreRegisteredAsService)
         originalTCCL = Thread.currentThread().contextClassLoader
     }
 
