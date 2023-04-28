@@ -139,9 +139,8 @@ public class WhenReadingImagesFromCatalogAsset {
                 .safe(SafeMode.UNSAFE)
                 .toFile(outputFile(tempFolder))
                 .build();
-        final File file = sampleWithImages;
 
-        var document = asciidoctor.convertFile(file, options, Document.class);
+        var document = asciidoctor.convertFile(sampleWithImages, options, Document.class);
 
         assertThat(document)
                 .isInstanceOf(Document.class);

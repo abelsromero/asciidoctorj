@@ -9,6 +9,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +37,17 @@ public class ClasspathExtension implements TestInstancePostProcessor, BeforeEach
         getStore(context)
                 .getOrComputeIfAbsent(contextKey,
                         keyType -> {
-                            final List<Field> resourcesFields = findFields(testInstance, File.class, ClasspathResource.class);
-                            final Map<Field, File> values = matchValues(testInstance, resourcesFields);
-                            return new CachedResources(values);
+                            final List<Field> fileFields = findFields(testInstance, File.class, ClasspathResource.class);
+                            final Map<Field, Resource> values = matchValues(testInstance, fileFields, File.class);
+
+                            final List<Field> pathFields = findFields(testInstance, Path.class, ClasspathResource.class);
+                            final Map<Field, Resource> values2 = matchValues(testInstance, pathFields, Path.class);
+
+                            values2.forEach(values::put);
+
+                            return new ResourcesCache(values);
                         },
-                        CachedResources.class);
+                        ResourcesCache.class);
     }
 
     @Override
@@ -48,7 +55,7 @@ public class ClasspathExtension implements TestInstancePostProcessor, BeforeEach
         context.getTestInstance()
                 .ifPresent(testInstance -> {
                     getStore(context)
-                            .get(context.getRequiredTestClass(), CachedResources.class)
+                            .get(context.getRequiredTestClass(), ResourcesCache.class)
                             .initializeFields(testInstance);
                 });
     }
@@ -57,13 +64,13 @@ public class ClasspathExtension implements TestInstancePostProcessor, BeforeEach
         return context.getRoot().getStore(TEST_CONTEXT_NAMESPACE);
     }
 
-    private Map<Field, File> matchValues(Object testInstance, List<Field> resourcesFields) {
+    private Map<Field, Resource> matchValues(Object testInstance, List<Field> resourcesFields, Class<?> targetType) {
         final ClasspathHelper classpathHelper = new ClasspathHelper(testInstance.getClass());
-        final Map<Field, File> assignedValues = new HashMap<>();
+        final Map<Field, Resource> assignedValues = new HashMap<>();
         for (Field field : resourcesFields) {
             final String path = getAnnotationValue(field);
             final File resource = classpathHelper.getResource(path);
-            assignedValues.put(field, resource);
+            assignedValues.put(field, new Resource(resource, targetType));
         }
         return assignedValues;
     }
@@ -84,7 +91,8 @@ public class ClasspathExtension implements TestInstancePostProcessor, BeforeEach
         assertSupportedType(parameterType);
 
         final String path = getAnnotationValue(parameter);
-        return new ClasspathHelper(context.getRequiredTestClass()).getResource(path);
+        final File resource = new ClasspathHelper(context.getRequiredTestClass()).getResource(path);
+        return parameterType == File.class ? resource : resource.toPath();
     }
 
     private static String getAnnotationValue(AnnotatedElement parameter) {
@@ -92,31 +100,34 @@ public class ClasspathExtension implements TestInstancePostProcessor, BeforeEach
     }
 
     private void assertSupportedType(Class<?> type) {
-        if (type != File.class) {
-            throw new ExtensionConfigurationException("Only File is supported");
+        if (type != File.class && type != Path.class) {
+            throw new ExtensionConfigurationException("Only File or Path are supported");
         }
     }
 
-    class CachedResources {
+    class Resource<T> {
+        private final File file;
+        private final Class<T> targetType;
 
-        private final Map<Field, File> cache;
+        Resource(File file, Class<T> targetType) {
+            this.file = file;
+            this.targetType = targetType;
+        }
+    }
 
-        CachedResources(Map<Field, File> cache) {
+    class ResourcesCache {
+
+        private final Map<Field, Resource> cache;
+
+        ResourcesCache(Map<Field, Resource> cache) {
             this.cache = cache;
         }
 
         public void initializeFields(Object testInstance) {
-            cache.forEach((k, v) -> injectValue(testInstance, k, v));
-        }
-
-        public void initializeParameters(Parameter[] parameters, Object testInstance) {
-            final ClasspathHelper classpathHelper = new ClasspathHelper(testInstance.getClass());
-            for (Parameter param : parameters) {
-                final String path = getAnnotationValue(param);
-                final File resource = classpathHelper.getResource(path);
-//                injectInstance(testInstance, param, resource);
-                System.out.println(parameters);
-            }
+            cache.forEach((field, resource) -> {
+                final Object value = resource.targetType == File.class ? resource.file : resource.file.toPath();
+                injectValue(testInstance, field, value);
+            });
         }
     }
 }

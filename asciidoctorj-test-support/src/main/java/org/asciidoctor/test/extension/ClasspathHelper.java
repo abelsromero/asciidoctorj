@@ -2,6 +2,7 @@ package org.asciidoctor.test.extension;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -20,10 +21,14 @@ public class ClasspathHelper {
      * Gets a resource in a similar way as {@link File#File(String)}.
      */
     public File getResource(String path) {
+        return new File(getUri(path));
+    }
+
+    private URI getUri(String path) {
         try {
             URL resource = classloader.getResource(path);
             if (resource != null) {
-                return new File(classloader.getResource(path).toURI());
+                return classloader.getResource(path).toURI();
             } else {
                 throw new RuntimeException(new FileNotFoundException(path));
             }
@@ -31,12 +36,4 @@ public class ClasspathHelper {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-
-    /**
-     * Gets a resource in a similar way as {@link File#File(String, String)}.
-     */
-    public File getResource(String parent, String child) {
-        return new File(getResource(parent), child);
-    }
-
 }

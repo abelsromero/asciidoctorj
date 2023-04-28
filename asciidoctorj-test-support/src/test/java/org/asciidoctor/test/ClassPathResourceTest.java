@@ -2,12 +2,14 @@ package org.asciidoctor.test;
 
 import org.asciidoctor.test.extension.ClasspathExtension;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,18 +17,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(OrderAnnotation.class)
 public class ClassPathResourceTest {
 
-    @ClasspathResource("test.txt")
-    private File file;
+    private static final String RESOURCE_PATH = "test.txt";
+    private static final int RESOURCE_SIZE = 42;
 
-    @Order(1)
-    @Test
-    void should_load_resource_from_classpath_as_field() {
-        assertThat(file).isNotEmpty();
+    @Nested
+    class WhenResourceIsDeclaredAsFile {
+
+        @ClasspathResource(RESOURCE_PATH)
+        private File resource;
+
+        @Order(1)
+        @Test
+        void should_load_resource_from_classpath_as_field() {
+            assertThat(resource).hasSize(RESOURCE_SIZE);
+        }
+
+        @Order(2)
+        @Test
+        void should_load_resource_classpath_as_parameter(@ClasspathResource(RESOURCE_PATH) File param) {
+            assertThat(resource).hasSize(RESOURCE_SIZE);
+            assertThat(param).hasSize(RESOURCE_SIZE);
+        }
     }
 
-    @Order(2)
-    @Test
-    void should_load_resource_classpath_as_parameter(@ClasspathResource("test.txt") File param) {
-        assertThat(param).isNotEmpty();
+    @Nested
+    class WhenResourceIsDeclaredAsPath {
+
+        @ClasspathResource(RESOURCE_PATH)
+        private Path resource;
+
+        @Order(1)
+        @Test
+        void should_load_resource_from_classpath_as_field() {
+            assertThat(resource).hasSize(RESOURCE_SIZE);
+        }
+
+        @Order(2)
+        @Test
+        void should_load_resource_classpath_as_parameter(@ClasspathResource(RESOURCE_PATH) Path param) {
+            assertThat(resource).hasSize(RESOURCE_SIZE);
+            assertThat(param).hasSize(RESOURCE_SIZE);
+        }
     }
 }

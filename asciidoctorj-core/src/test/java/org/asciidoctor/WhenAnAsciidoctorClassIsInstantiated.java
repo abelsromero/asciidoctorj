@@ -19,6 +19,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -238,7 +239,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
 
     @Test
     public void string_content_with_custom_date_should_be_rendered(
-            @ClasspathResource("documentwithdate.asciidoc") File documentWithDate)
+            @ClasspathResource("documentwithdate.asciidoc") Path documentWithDate)
             throws IOException, SAXException, ParserConfigurationException {
 
         Calendar customDate = Calendar.getInstance();
@@ -249,14 +250,14 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         Map<String, Object> attributes = attributes().localDate(customDate.getTime()).asMap();
         Map<String, Object> options = options().attributes(attributes).asMap();
 
-        String render_file = asciidoctor.convert(Files.readString(documentWithDate.toPath()), options);
+        String render_file = asciidoctor.convert(Files.readString(documentWithDate), options);
         assertRenderedLocalDateContent(render_file, "2012-12-05.");
 
     }
 
     @Test
     public void string_content_with_custom_time_should_be_rendered(
-            @ClasspathResource("documentwithtime.asciidoc") File documentWithDate) throws IOException, SAXException,
+            @ClasspathResource("documentwithtime.asciidoc") Path documentWithDate) throws IOException, SAXException,
             ParserConfigurationException {
 
         Calendar customTime = Calendar.getInstance();
@@ -267,7 +268,7 @@ public class WhenAnAsciidoctorClassIsInstantiated {
         Map<String, Object> attributes = attributes().localTime(customTime.getTime()).asMap();
         Map<String, Object> options = options().attributes(attributes).asMap();
 
-        String render_file = asciidoctor.convert(Files.readString(documentWithDate.toPath()), options);
+        String render_file = asciidoctor.convert(Files.readString(documentWithDate), options);
 
         Format TIME_FORMAT = new SimpleDateFormat("HH:mm:ss z");
 

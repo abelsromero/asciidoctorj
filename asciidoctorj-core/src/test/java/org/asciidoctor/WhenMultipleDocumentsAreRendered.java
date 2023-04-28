@@ -11,6 +11,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -25,7 +26,7 @@ public class WhenMultipleDocumentsAreRendered {
     private Asciidoctor asciidoctor;
 
     @ClasspathResource("documenttitle.adoc")
-    private File documentTitleDocument;
+    private Path documentTitleDocument;
 
     @Test
     public void should_render_the_same_document_a_100_times() throws IOException {
@@ -34,7 +35,7 @@ public class WhenMultipleDocumentsAreRendered {
         int i = 0;
         String renderContent = null;
         for (; i < 100; i++) {
-            renderContent = asciidoctor.convert(Files.readString(documentTitleDocument.toPath()),
+            renderContent = asciidoctor.convert(Files.readString(documentTitleDocument),
                     Options.builder()
                             .safe(SafeMode.UNSAFE)
                             .build());

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +26,7 @@ public class ASTShowcase {
     private File astDemo;
 
     @ClasspathResource("ast-demo-result.txt")
-    private File astDemoResult;
+    private Path astDemoResult;
 
 
     @Test
@@ -37,7 +38,7 @@ public class ASTShowcase {
 
         assertThat(
                 ASTExtractorTreeprocessor.result.toString(),
-                is(Files.readString(astDemoResult.toPath()).replaceAll("\\r", "")));
+                is(Files.readString(astDemoResult).replaceAll("\\r", "")));
     }
 
 }
