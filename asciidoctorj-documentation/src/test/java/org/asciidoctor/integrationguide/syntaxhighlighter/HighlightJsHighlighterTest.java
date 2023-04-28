@@ -1,10 +1,6 @@
 package org.asciidoctor.integrationguide.syntaxhighlighter;
 
-import org.apache.commons.io.IOUtils;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.*;
 import org.asciidoctor.test.ClassResource;
 import org.asciidoctor.test.ClasspathResource;
 import org.asciidoctor.test.extension.AsciidoctorExtension;
@@ -14,7 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -48,7 +45,7 @@ public class HighlightJsHighlighterTest {
             OptionsBuilder.options()
                 .standalone(true) // <2>
                 .toFile(false)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs"))); // <3>
+                .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build())); // <3>
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -85,7 +82,7 @@ public class HighlightJsHighlighterTest {
             OptionsBuilder.options()
                 .standalone(true)
                 .toFile(false)
-                .attributes(AttributesBuilder.attributes().sourceHighlighter("myhighlightjs")));
+                .attributes(Attributes.builder().sourceHighlighter("myhighlightjs").build()));
 
         assertThat(result,
             containsString("<script>hljs.initHighlighting()</script>"));
@@ -126,11 +123,9 @@ public class HighlightJsHighlighterTest {
         File jsFile = new File(toDir, "highlight.min.js");
         assertTrue(jsFile.exists());
 
-        try (FileReader docReader = new FileReader(new File(toDir, "sources.html"))) {
-            String html = IOUtils.toString(docReader);
-            assertThat(html, containsString("<link rel=\"stylesheet\" href=\"github.min.css\">"));
-            assertThat(html, containsString("<script src=\"highlight.min.js\"></script>"));
-        }
+        String html = Files.readString(Path.of(toDir.toURI()).resolve("sources.html"));
+        assertThat(html, containsString("<link rel=\"stylesheet\" href=\"github.min.css\">"));
+        assertThat(html, containsString("<script src=\"highlight.min.js\"></script>"));
 //end::includestylesheetwriter[]
     }
 

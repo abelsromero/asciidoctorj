@@ -1,6 +1,5 @@
 package org.asciidoctor.integrationguide;
 
-import org.apache.commons.io.IOUtils;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.FileReader;
+import java.nio.file.Files;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -107,7 +106,7 @@ public class OptionsTest {
 
         assertTrue(targetFile.exists());
         assertThat(
-                IOUtils.toString(new FileReader(targetFile)),
+                Files.readString(targetFile.toPath()),
                 containsString("<p>Hello World"));
 //end::optionToFile[]
     }
