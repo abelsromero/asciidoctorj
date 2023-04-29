@@ -64,7 +64,7 @@ public class WhenGlobExpressionIsUsedForScanning {
         List<File> asciidocFiles = globDirectoryWalker.scan();
 
         assertThat(asciidocFiles)
-                .contains(new File(fileNameInRootDir));
+                .contains(new File(fileNameInRootDir).getAbsoluteFile());
     }
 
     @Test

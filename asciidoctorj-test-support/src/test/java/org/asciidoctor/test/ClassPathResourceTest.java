@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ClassPathResourceTest {
 
     private static final String RESOURCE_PATH = "test.txt";
-    private static final int RESOURCE_SIZE = 42;
+
 
     @Nested
     class WhenResourceIsDeclaredAsFile {
@@ -29,14 +29,14 @@ public class ClassPathResourceTest {
         @Order(1)
         @Test
         void should_load_resource_from_classpath_as_field() {
-            assertThat(resource).hasSize(RESOURCE_SIZE);
+            assertResourceContent(resource.toPath());
         }
 
         @Order(2)
         @Test
         void should_load_resource_classpath_as_parameter(@ClasspathResource(RESOURCE_PATH) File param) {
-            assertThat(resource).hasSize(RESOURCE_SIZE);
-            assertThat(param).hasSize(RESOURCE_SIZE);
+            assertResourceContent(param.toPath());
+            assertResourceContent(resource.toPath());
         }
     }
 
@@ -49,14 +49,19 @@ public class ClassPathResourceTest {
         @Order(1)
         @Test
         void should_load_resource_from_classpath_as_field() {
-            assertThat(resource).hasSize(RESOURCE_SIZE);
+            assertResourceContent(resource);
         }
 
         @Order(2)
         @Test
         void should_load_resource_classpath_as_parameter(@ClasspathResource(RESOURCE_PATH) Path param) {
-            assertThat(resource).hasSize(RESOURCE_SIZE);
-            assertThat(param).hasSize(RESOURCE_SIZE);
+            assertResourceContent(param);
+            assertResourceContent(resource);
         }
+
+    }
+
+    private void assertResourceContent(Path resource) {
+        assertThat(resource).content().contains("Simple resource located in the classpath");
     }
 }
