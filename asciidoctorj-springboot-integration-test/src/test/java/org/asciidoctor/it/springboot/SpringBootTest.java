@@ -65,7 +65,8 @@ public class SpringBootTest {
                 .execute();
 
         return new Gson()
-                .fromJson(response.body().string(), new TypeToken<Map<String, String>>() {}.getType());
+                .fromJson(response.body().string(), new TypeToken<Map<String, String>>() {
+                }.getType());
     }
 
     private String base64Encode(String asciidocDocument) {
