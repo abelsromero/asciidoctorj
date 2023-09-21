@@ -64,6 +64,7 @@ Build Improvement::
 * Set JUnit5 as default test engine (#1186) (@abelsromero)
 * Removed pollutedTest Gradle task using junit-pioneer (#1193) (@abelsromero)
 * Ignore 'docs/**' changes in CI (#1225) (@abelsromero)
+* Run tests on Java 21 (#1236) (@abelsromero)
 
 Documentation::
 
