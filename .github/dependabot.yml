@@ -12,5 +12,3 @@ updates:
       interval: "daily"
     labels:
       - "dependencies"
-    allow:
-      - dependency-name: "org.jruby:*"
