@@ -115,7 +115,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Setup Java
-        uses: s4u/setup-maven-action@v1.7.0
+        uses: s4u/setup-maven-action@v1.18.0
         with:
           java-distribution: temurin
           java-version: ${{ matrix.java }}
