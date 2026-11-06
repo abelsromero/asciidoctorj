@@ -162,27 +162,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
-      # Gradle 8.12 doesn't run on Java 25: build the CLI jar with Java 21, then the native image with GraalVM 25
-      - uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '21'
-      - uses: gradle/actions/setup-gradle@v6
-      - name: Build CLI jar
-        run: ./gradlew :asciidoctorj-java-cli:assemble
+      # the build requires Java 21, the native image is built with GraalVM 25 (found by the Gradle plugin through
+      # GRAALVM_HOME): set up GraalVM first, then Java 21, which sets JAVA_HOME (the JVM that runs Gradle)
       - uses: graalvm/setup-graalvm@v1
         with:
           java-version: '25'
           distribution: graalvm-community
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build native image
-        shell: bash
-        run: tools/build-native.sh
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Build CLI JVM application and native image
+        run: ./gradlew :asciidoctorj-java-cli:installDist :asciidoctorj-java-cli:nativeCompile
       - name: Smoke test
         shell: bash
-        run: tools/native-smoke-test/run.sh asciidoctorj-java-cli/build/native/asciidoctorj asciidoctorj-java-cli/build/libs/asciidoctorj-java-cli-*[0-9T].jar
+        run: tools/native-smoke-test/run.sh asciidoctorj-java-cli/build/native/nativeCompile/asciidoctorj asciidoctorj-java-cli/build/install/asciidoctorj-java-cli
       - name: Upload native executable
         uses: actions/upload-artifact@v7
         with:
           name: asciidoctorj-java-${{ matrix.platform }}
-          path: asciidoctorj-java-cli/build/native/asciidoctorj${{ runner.os == 'Windows' && '.exe' || '' }}
+          path: asciidoctorj-java-cli/build/native/nativeCompile/asciidoctorj${{ runner.os == 'Windows' && '.exe' || '' }}

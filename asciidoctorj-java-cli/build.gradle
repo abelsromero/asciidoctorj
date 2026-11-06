@@ -1,3 +1,8 @@
+plugins {
+    id 'application'
+    alias(libs.plugins.graalvm.native)
+}
+
 description = 'The command line interface of AsciidoctorJ'
 
 base {
@@ -17,19 +22,20 @@ test {
     mustRunAfter ':asciidoctorj-java:test'
 }
 
-jar {
-    def runtimeClasspath = configurations.runtimeClasspath
-    manifest {
-        attributes 'Main-Class': 'org.asciidoctor.cli.Invoker'
-        // the core jar is expected next to the CLI jar
-        attributes 'Class-Path': runtimeClasspath.elements.map { it.collect { it.asFile.name }.join(' ') }
+application {
+    mainClass = 'org.asciidoctor.cli.Invoker'
+}
+
+// the native executable of the CLI (build/native/nativeCompile/asciidoctorj), built with GraalVM by ./gradlew nativeCompile
+// NOTE native-image is looked up in $GRAALVM_HOME/bin, then in $JAVA_HOME/bin
+graalvmNative {
+    binaries {
+        main {
+            imageName = 'asciidoctorj'
+            sharedLibrary = false
+            // -march=compatibility: run on any CPU of the target architecture
+            // -H:-ParseRuntimeOptions: don't let the VM consume the -D (destination dir) argument as a system property
+            buildArgs.addAll('-march=compatibility', '-H:-ParseRuntimeOptions')
+        }
     }
 }
-
-// copy the core jar next to the CLI jar, so that java -jar works from the build/libs directory
-def copyRuntimeDependencies = tasks.register('copyRuntimeDependencies', Copy) {
-    from configurations.runtimeClasspath
-    into layout.buildDirectory.dir('libs')
-}
-
-assemble.dependsOn copyRuntimeDependencies
